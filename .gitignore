@@ -1,0 +1,43 @@
+# Python bytecode files
+*.pyc
+*.pyo
+__pycache__/
+
+# Virtual environment directories (common names)
+venv/
+brad-env/
+env/
+envs/
+.env
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# IDE/editor specific files (e.g., VS Code, PyCharm)
+.vscode/
+.idea/
+
+# Dependency management files
+*.log
+*.lock
+*.db
+
+# Test and coverage files
+.coverage
+nosetests.xml
+*.cover
+*.json
+# Pytest cache
+.pytest_cache/
+
+# Build directories and distribution files
+build/
+dist/
+*.egg-info/
+
+# OS specific files
+.DS_Store  # macOS
+Thumbs.db  # Windows
+
+# Other environment or configuration files
+*.envrc
