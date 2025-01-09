@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import csv
+from similarity_finder import similarity_function
 from jobspy import scrape_jobs
 
 app = Flask(__name__)
@@ -11,7 +12,7 @@ CORS(app)
 @app.route('/scrape-jobs', methods=['POST'])
 def scrape_jobs_endpoint():
     data = request.json
-    search_term = data.get('search_term')
+    search_term = data.get('jobTitle')
     location = data.get('location')
     country = data.get('country')
 
@@ -24,17 +25,15 @@ def scrape_jobs_endpoint():
             search_term=search_term,
             google_search_term=f"{search_term} jobs in {location}",
             location=location,
-            results_wanted=200,
+            results_wanted=5,
+            is_remote=True,
             easy_apply=True,
             country_indeed=country,
         )
-        # Ensure job_url is a list of strings, not a pandas Series
-        job_links = jobs.job_url.tolist()  # Convert to list of job URLs
+        job_links = similarity_function(jobs, search_term)
 
-        print(job_links)  # Optionally print job links for debugging
-
-        # Save the job listings to a CSV file
-        jobs.to_csv("jobs_pakistan.csv", quoting=csv.QUOTE_NONNUMERIC, escapechar="\\", index=False)
+        # # Save the job listings to a CSV file
+        # jobs.to_csv("jobs.csv", quoting=csv.QUOTE_NONNUMERIC, escapechar="\\", index=False)
 
         # Return the list of job links as part of the JSON response
         return jsonify({"message": f"Found {len(job_links)} jobs", "jobLinks": job_links}), 200
